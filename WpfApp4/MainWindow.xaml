@@ -1,0 +1,220 @@
+﻿<Window x:Class="WpfApp4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp4"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None">
+
+  <Window.Resources>
+    <Storyboard x:Key="OpenReciver">
+      <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="MainGrid">
+        <ThicknessAnimation.To>
+          <Thickness>-800 0 0 0</Thickness>
+        </ThicknessAnimation.To>
+        <ThicknessAnimation.DecelerationRatio> 0.9 </ThicknessAnimation.DecelerationRatio>
+      </ThicknessAnimation>
+      <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="CloseButton">
+        <ThicknessAnimation.To>
+          <Thickness>0 0 -42 0</Thickness>
+        </ThicknessAnimation.To>
+        <ThicknessAnimation.SpeedRatio>0.8</ThicknessAnimation.SpeedRatio>
+        <ThicknessAnimation.DecelerationRatio> 0.9 </ThicknessAnimation.DecelerationRatio>
+      </ThicknessAnimation>
+    </Storyboard>
+    <Storyboard x:Key="OpenSender">
+      <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="MainGrid">
+        <ThicknessAnimation.To>
+          <Thickness>0 0 0 0</Thickness>
+        </ThicknessAnimation.To>
+        <ThicknessAnimation.DecelerationRatio>0.9</ThicknessAnimation.DecelerationRatio>
+      </ThicknessAnimation>
+      <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="CloseButton">
+        <ThicknessAnimation.To>
+          <Thickness>0 0 42 0</Thickness>
+        </ThicknessAnimation.To>
+        <ThicknessAnimation.SpeedRatio>0.8</ThicknessAnimation.SpeedRatio>
+        <ThicknessAnimation.DecelerationRatio>0.9</ThicknessAnimation.DecelerationRatio>
+      </ThicknessAnimation>
+    </Storyboard>
+  </Window.Resources>
+
+
+  <Window.Triggers>
+    <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="OpenReciverButton">
+      <BeginStoryboard Storyboard="{StaticResource OpenReciver}" />
+    </EventTrigger>
+
+    <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="OpenSenderButton">
+      <BeginStoryboard Storyboard="{StaticResource OpenSender}" />
+    </EventTrigger>
+  </Window.Triggers>
+
+
+  <Grid MouseDown="Window_MouseDown" x:Name="MainGrid" Width="1600" Background="#1F2F5E">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="0.5*" />
+      <ColumnDefinition Width="4*" />
+      <ColumnDefinition Width="2*" />
+      <ColumnDefinition Width="2*" />
+      <ColumnDefinition Width="4*" />
+      <ColumnDefinition Width="0.5*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="3*" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+
+    <!-- Port ComboBox -->
+    <Grid Grid.Column="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <TextBlock Margin="0 0 0 55" Grid.Column="0" FontSize="18" VerticalAlignment="Center"
+                 HorizontalAlignment="Center">
+        Port:
+      </TextBlock>
+
+      <ComboBox Grid.Column="0" FontSize="20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" Width="100"
+                ItemsSource="{Binding ComPorts}"
+                SelectedItem="{Binding SelectedSenderCom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+      <!-- Refresh Button -->
+      <Button Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Content="Refresh"
+              Command="{Binding RefreshPorts}" />
+
+      <!-- Baundrate ComboBox -->
+      <TextBlock Margin="0 0 0 55"
+                 Grid.Column="2" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+        Baundrate:
+      </TextBlock>
+      <ComboBox Grid.Column="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"
+                ItemsSource="{Binding Baudrate}" SelectedItem="{Binding SelectedSenderBaudrate}" />
+    </Grid>
+
+    <!-- Text to be sent -->
+    <TextBlock Grid.Column="1" Grid.Row="1" Margin="0 4 0 0"
+               FontSize="18" VerticalAlignment="Top" HorizontalAlignment="Center">
+      Message:
+    </TextBlock>
+    <TextBox AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+             ScrollViewer.VerticalScrollBarVisibility="Auto"
+             ScrollViewer.CanContentScroll="True" Text="{Binding SenderTextBox}" Style="{x:Null}" Margin="20 25 20 20"
+             Grid.Column="1" Grid.Row="1" />
+
+    <!-- rs232 connector image  as button-->
+    <Button x:Name="OpenReciverButton" Style="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Center"
+            Grid.Row="1" Grid.Column="2" Margin="0,24,0,28">
+      <Button.Template>
+        <ControlTemplate>
+          <Image RenderTransformOrigin="0.5,0.5"
+
+                 Source="Images/Background/rs232.png" Height="219" Width="204">
+            <Image.RenderTransform>
+              <RotateTransform Angle="90" />
+            </Image.RenderTransform>
+          </Image>
+        </ControlTemplate>
+      </Button.Template>
+    </Button>
+
+
+    <!-- Send Button -->
+    <Grid Grid.Column="1" Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Button FontFamily="{StaticResource LatoRegular}" FontSize="20" Command="{Binding Send}"
+              VerticalAlignment="Center" HorizontalAlignment="Center" Width="140" Height="45" Content="Start stream" />
+      <Button FontFamily="{StaticResource LatoRegular}" FontSize="20" Grid.Column="1"
+              VerticalAlignment="Center" HorizontalAlignment="Center" Width="140" Height="45" Content="OpenFile"
+              Command="{Binding OpenFile}" />
+    </Grid>
+
+    <!-- Port ComboBox -->
+    <Grid Grid.Column="4">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <TextBlock Margin="0 0 0 55" Grid.Column="0" FontSize="18" VerticalAlignment="Center"
+                 HorizontalAlignment="Center">
+        Port:
+      </TextBlock>
+
+      <!-- Refresh Button -->
+      <Button Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Content="Refresh"
+              Command="{Binding RefreshPorts}" />
+
+
+      <ComboBox Grid.Column="0" FontSize="20"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"
+                ItemsSource="{Binding ComPorts}"
+                SelectedItem="{Binding SelectedReciverCom}" />
+
+      <!-- Baundrate ComboBox -->
+      <TextBlock Margin="0 0 0 55"
+                 Grid.Column="2" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+        Baudrate:
+      </TextBlock>
+      <ComboBox Grid.Column="2" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"
+                SelectedItem="{Binding SelectedReciverBaudrate}" ItemsSource="{Binding Baudrate}" />
+    </Grid>
+
+    <!-- Text to be sent -->
+    <TextBlock Grid.Column="4" Grid.Row="1" Margin="0 4 0 0"
+               FontSize="18" VerticalAlignment="Top" HorizontalAlignment="Center">
+      Recived data:
+    </TextBlock>
+    <TextBox AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+             ScrollViewer.VerticalScrollBarVisibility="Auto"
+             ScrollViewer.CanContentScroll="True" Text="{Binding ReciverTextBox}" Style="{x:Null}" Margin="20 25 20 20" Grid.Column="4" Grid.Row="1" />
+
+    <!-- rs232 connector image  as button-->
+    <Button x:Name="OpenSenderButton" Style="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Center"
+            Grid.Row="1" Grid.Column="2" Margin="245,24,0,28" Grid.ColumnSpan="2">
+      <Button.Template>
+        <ControlTemplate>
+          <Image RenderTransformOrigin="0.5, 0.5"
+
+                 Source="Images/Background/rs232.png" Height="219" Width="204">
+            <Image.RenderTransform>
+              <RotateTransform Angle="-90" />
+
+            </Image.RenderTransform>
+          </Image>
+        </ControlTemplate>
+      </Button.Template>
+    </Button>
+
+
+    <!-- Send Button -->
+    <Button FontFamily="{StaticResource LatoRegular}" FontSize="20" Grid.Column="4" Grid.Row="2"
+            VerticalAlignment="Center" HorizontalAlignment="Center" Width="140" Height="45" Content="Start stream"
+            Command="{Binding Receive}" />
+
+
+    <Button Margin="0 0 42 0" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0" x:Name="CloseButton"
+            HorizontalAlignment="Center" VerticalAlignment="Top"
+            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}"
+            BorderBrush="{x:Null}" Foreground="Black"
+            Click="CloseButton_OnClick">
+      <materialDesign:PackIcon Kind="Close" Height="25" Width="25" />
+    </Button>
+
+  </Grid>
+
+</Window>
