@@ -55,7 +55,7 @@ namespace WpfApp4.ViewModel
                     return;
                 }
 
-                Task.Run( () => _senderModem.Send( Encoding.ASCII.GetBytes( SenderTextBox + "\r\n" ) ) );
+                Task.Run( () => _senderModem.Send( Encoding.GetEncoding( 28591 ).GetBytes( SenderTextBox ) ) );
             } );
 
             BackgroundWorker reciveWorker = new BackgroundWorker();

@@ -48,11 +48,11 @@ namespace WpfApp4.Model
             portNumber = new SerialPort( portName )
             {
                 // maksymalny czas dla odczytu z COM
-                ReadTimeout = 5000,
+                ReadTimeout = 10000,
                 // predkosc BaudRate
                 BaudRate = baudrate,
                 // enkoding pozwalajacy na zachowanie wartosci wyzszych niz 127 - checksum
-                //Encoding = System.Text.Encoding.GetEncoding( 28591 )
+                Encoding = System.Text.Encoding.GetEncoding( 28591 )
             };
             // otwarcie portu
             portNumber.Open();
@@ -247,7 +247,6 @@ namespace WpfApp4.Model
                                 byteListHelper.Clear();
                                 // nadaj ACK
                                 portNumber.WriteLine( ACK.ToString() );
-                                Console.WriteLine( "ACK" );
                             }
                         }
 
@@ -258,7 +257,6 @@ namespace WpfApp4.Model
                             portNumber.DiscardInBuffer();
                             // nadaj sygnal sterujacy NAK
                             portNumber.WriteLine( NAK.ToString() );
-                            Console.WriteLine( "NAK" );
                         }
 
                         // wykonuj instrukcje dopóki otrzymasz sygnal sterujacy SOH
