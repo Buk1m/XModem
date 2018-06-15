@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
+using System.Linq;
+using System.Text;
 using System.Windows;
 
 namespace WpfApp4.Model
@@ -12,21 +14,26 @@ namespace WpfApp4.Model
     public class Xmodem
     {
         #region Znaki sterujące
+
         //Start Of Heading - poczatek naglowka
         private const int SOH = 1;
+
         // End Of Text - koniec tekstu
         private const int EOT = 4;
+
         // AcKnowledge - potwierdzenie poprawnego odbioru pakietu
         private const int ACK = 6;
+
         // Negative AcKnowledge - sygnalizuje niepoprawne odebranie pakietu
         private const int NAK = 21;
+
         // Substitute - znak, dopelniajacy do 128bajtow
-        private const int SUB = 26; 
+        private const int SUB = 26;
+
         #endregion
 
         // instancja klasy do obslugi portu szeregowego (COM)
         private readonly SerialPort portNumber;
-
         //public string Message { get; set; }
 
         /// <summary>
@@ -41,9 +48,11 @@ namespace WpfApp4.Model
             portNumber = new SerialPort( portName )
             {
                 // maksymalny czas dla odczytu z COM
-                ReadTimeout = 10000,
+                ReadTimeout = 5000,
                 // predkosc BaudRate
-                BaudRate = baudrate
+                BaudRate = baudrate,
+                // enkoding pozwalajacy na zachowanie wartosci wyzszych niz 127 - checksum
+                //Encoding = System.Text.Encoding.GetEncoding( 28591 )
             };
             // otwarcie portu
             portNumber.Open();
@@ -76,7 +85,7 @@ namespace WpfApp4.Model
                 {
                     // czekaj i sprawdzaj az odczyt z portu bedzie znakiem innym niz NAK
                     // jeżeli program będzie czekać na znak dłuzej niż ReadTimeout to nastąpi wyjątek
-                    while (Convert.ToInt32( portNumber.ReadLine() ) != NAK);
+                    while (Convert.ToInt32( portNumber.ReadLine() ) != NAK) ;
 
                     // petla wykonujaca się liczbaBajtowDoPrzeslania / 128 aby zapewnic przesylanie 
                     // tylko 128 bajtowych pakietow
@@ -84,6 +93,7 @@ namespace WpfApp4.Model
                     {
                         do
                         {
+                            byte[] sentBytes = new byte[128];
                             // wpisz znak SOH do portu szeregowego
                             portNumber.WriteLine( SOH.ToString() );
                             // wpisz numer pakietu
@@ -97,20 +107,25 @@ namespace WpfApp4.Model
                                 if (i * 128 + j == bytesToSend.Length)
                                 {
                                     //dopelnij pozostale bajty znakiem SUB
-                                    for(int k=0;k<128-j;k++)
+                                    for (int k = 0; k < 128 - j; k++)
+                                    {
                                         //wpisz znak sub na port szeregowy
                                         portNumber.Write( Convert.ToChar( SUB ).ToString() );
+                                        sentBytes[j + k] = SUB;
+                                    }
+
                                     //przerwij petle 
                                     break;
                                 }
 
                                 //wpisz kolejny bajt wiadomosci do portu
                                 portNumber.Write( Convert.ToChar( bytesToSend[i * 128 + j] ).ToString() );
-
+                                sentBytes[j] = bytesToSend[i * 128 + j];
                             }
 
                             // utworz sume kontrolna i zapisz w tablicy bajtów crc
-                            byte[] crc = createCheckSumCRC( bytesToSend );
+                            byte[] crc = createCheckSumCRC( sentBytes );
+
                             // przeslij sume kontrolna
                             for (int j = 0; j < 2; j++)
                             {
@@ -126,8 +141,8 @@ namespace WpfApp4.Model
                     do
                     {
                         // wysylaj koniec tekstu
-                        portNumber.WriteLine(EOT.ToString());
-                      // dopoki nie uzyskasz odpowiedzi ACK
+                        portNumber.WriteLine( EOT.ToString() );
+                        // dopoki nie uzyskasz odpowiedzi ACK
                     } while (Convert.ToInt32( portNumber.ReadLine() ) != ACK);
                 }
             }
@@ -140,6 +155,7 @@ namespace WpfApp4.Model
                     MessageBox.Show( ex.Message );
                     return;
                 }
+
                 // jezeli inny wyjatek, rzuc go dalej
                 throw;
             }
@@ -172,15 +188,17 @@ namespace WpfApp4.Model
                     {
                         // nadawaj NAK na port
                         portNumber.WriteLine( NAK.ToString() );
-                      // dopóki nie otrzymasz sygnalu SOH lub nastapi Timeout
+                        // dopóki nie otrzymasz sygnalu SOH lub nastapi Timeout
                     } while (Convert.ToInt32( portNumber.ReadLine() ) != SOH);
 
                     do
                     {
                         // sprawdz czy dopelnienie i numer pakietu sie zgadzaja
                         if (255 - Convert.ToInt32( portNumber.ReadLine() ) != Convert.ToInt32( portNumber.ReadLine() ))
+                        {
                             // jezeli nie to ustaw flage błędu
                             errorFlag = true;
+                        }
                         // w przeciwnym wypadku
                         else
                         {
@@ -189,9 +207,10 @@ namespace WpfApp4.Model
                             {
                                 // wczytywanie pojedynczego znaku z portu do zmiennej helper
                                 int helper = portNumber.ReadChar();
-                                    // dodawanie wartosci do tymczasowej listy pomocniczej
-                                    byteListHelper.Add( Convert.ToByte( helper ) );
+                                // dodawanie wartosci do tymczasowej listy pomocniczej
+                                byteListHelper.Add( Convert.ToByte( helper ) );
                             }
+
 
                             // flaga poprawności danych 
                             bool dataCorrectFlag = true;
@@ -199,15 +218,19 @@ namespace WpfApp4.Model
                             // utworzenie sumy kontrolnej na podstawie odebranych danych
                             byte[] checkSumCRC = createCheckSumCRC( byteListHelper.ToArray() );
                             // petla porownujaca sumy kontrolne
+                            // jezeli suma kontrolna rozna od odebranej
+
+
                             for (int j = 0; j < 2; j++)
-                            {
-                                // jezeli suma kontrolna rozna od odebranej
                                 if (checkSumCRC[j] != Convert.ToByte( portNumber.ReadChar() ))
+                                {
                                     // ustaw flage poprawnosci danych na false
                                     dataCorrectFlag = false;
-                            }
+                                }
+
+
                             // jezeli dane poprawne
-                            if (dataCorrectFlag)
+                            if (!dataCorrectFlag)
                                 // ustawe flage bledu na true
                                 errorFlag = true;
                             // jezeli nie
@@ -219,10 +242,12 @@ namespace WpfApp4.Model
                                     // dodaj bajt do docelowej listy odebranych bajtow
                                     recivedBytes.Add( byteHelper );
                                 }
+
                                 // wyczysc liste pomocnicza 
                                 byteListHelper.Clear();
                                 // nadaj ACK
                                 portNumber.WriteLine( ACK.ToString() );
+                                Console.WriteLine( "ACK" );
                             }
                         }
 
@@ -233,16 +258,17 @@ namespace WpfApp4.Model
                             portNumber.DiscardInBuffer();
                             // nadaj sygnal sterujacy NAK
                             portNumber.WriteLine( NAK.ToString() );
+                            Console.WriteLine( "NAK" );
                         }
 
-                    // wykonuj instrukcje dopóki otrzymasz sygnal sterujacy SOH
+                        // wykonuj instrukcje dopóki otrzymasz sygnal sterujacy SOH
                     } while (portNumber.ReadLine() == SOH.ToString());
 
                     // po odebraniu wszystkich bajtow nadaj ACK
                     portNumber.WriteLine( ACK.ToString() );
 
                     // zapisz odebrana wiadomosc w pliku txt
-                    File.WriteAllBytes( @"..\..\message.txt", recivedBytes.ToArray());
+                    File.WriteAllBytes( @"..\..\message.txt",  recivedBytes.ToArray() );
                 }
             }
             // obsluga wyjatkow
@@ -261,22 +287,22 @@ namespace WpfApp4.Model
             // zmienna przechowywujaca obliczona sume kontrolna
             int checksumCRC = 0;
             // dla kazdego bajtu pakiecie
-            foreach ( byte _byte in package )
+            foreach (byte _byte in package)
             {
                 // operacja XOR pomiedzy poprzednim crc a kolejnym znakiem
                 // zamieniona na zasadzie mlodsze bity ze starszymi 
                 // odbicie lustrzane
                 checksumCRC = checksumCRC ^ _byte << 8;
                 // dla kazdego bitu w bajcie
-                for ( int i = 0; i < 8; i++ )
+                for (int i = 0; i < 8; i++)
                 {
                     // jezeli  checksum ma 1 na najstarszym bicie
-                    if ( Convert.ToBoolean( checksumCRC & 0x8000 ) )
+                    if (Convert.ToBoolean( checksumCRC & 0x8000 ))
                         // dzielenie przez 2 i XOR z wielomianem
-                        checksumCRC = checksumCRC << 1 ^ 0x1021;
+                        checksumCRC = (checksumCRC >> 1) ^ 0x1021;
                     else
-                    // dzielenie przez 2
-                        checksumCRC = checksumCRC << 1;
+                        // dzielenie przez 2
+                        checksumCRC = checksumCRC >> 1;
                 }
             }
 

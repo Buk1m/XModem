@@ -1,2 +1,104 @@
-srdgsdrgsdrgsdrg
-
+przyleg?y 		- adjacent
+obw?d ko?a 		- cirsumference
+przystaj?cy 		- congruent
+pochodna 		- derivative
+przeno?ci?, przesuwa? 	- displace
+tr?jk?t r?wnoboczny 	- equilateral triangle
+rozk?ada? na czynniki 	- factorize
+przeciwptostok?tna 	- hypotenuse
+wpisa? w 		- inscribe in
+tr?jk?t r?wnoramienny 	- isosceles triangle
+przyprostok?tna 	- leg
+odjemna 		- minuend
+mnozna 			- multiplicand
+k?t rozwarty 		- obtuse angle
+liczba porz?dkowa 	- ordinal number
+obw?d 			- perimeter
+iloczyn 		- product
+u?emek w?a?ciwy 	- proper fraction
+iloraz 			- quotient
+podnosi? liczb? do potegi - raise a number to a power
+liczba wymierna 	- rational number
+wielko?? odwrotna 	- reciprocal
+u?amek dziesi?tny okresowy - recurring decimal
+skr?ci?/upto?ci? u?amek - reduce to lowest terms
+r?wnoleg?obok 		- rhomboid/parallelogram
+romb 			- rhombus
+spe?ni? r?wnanie 	- satisfy am equation
+p?kole 			- semi-cicle
+indeks dolny 		- subscript
+wyci?gn?? pierwiastek	- take a root
+styczna 		- tangent
+sto?ek 			- cone
+ci?ciwa 		- chord
+sieczna 		- secant
+o? 			- axis
+wkl?s?y 		- concave
+wypuk?y 		- convex
+  
+canvas 			- brezent
+carry sth out 		- wykona?
+come up with 		- wymy?li?
+pay off 		- powodzi? si?, dawa? dobre rezultaty 
+take up 		- odpowiada? na co?
+bring down 		- obni?a?
+bring about 		- spowodowa?
+take forward 		- sprzyja? czemu? do rozwoju
+get round 		- poradzi? sobie z problemem
+set up 			- zak?ada? np. biznes
+dung 			- ?ajno
+fertilizer 		- naw?z
+inflateble 		- nadmuchiiwanie
+insulation 		- izolacaja
+rigid 			- sztywny
+sealed 			- zapiecz?towany
+
+  
+  
+agitated 		- poruszony
+confectionary 		- s?odycze
+courteous 		- uprzejmy
+existing customer 	- osoba kt?ra obecnie jest klientem
+find your feet 		- sta? si? niezale?nym
+originate 		- sta? si? pierwszys raz w okre?lonymi miejscy i czasie
+quibble 		- spiera? si?
+tills 			- kasa fiskalna
+affiliated 		- stowarzyszony
+bribery 		- przekupstwo, barbarzy?stwo
+contributor 		- co? co przyczynia si? do czego?
+credibility 		- wiarygodno??  
+deception 		- oszustwo
+exploit			- wykorzysta?
+greed 			- chciwo??
+itinerary 		- plan podr??y
+paddling 		- wios?owanie
+prejudice 		- uprzedzenie
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
