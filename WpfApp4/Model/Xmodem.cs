@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Windows;
 
 namespace WpfApp4.Model
@@ -34,7 +33,7 @@ namespace WpfApp4.Model
 
         // instancja klasy do obslugi portu szeregowego (COM)
         private readonly SerialPort portNumber;
-        //public string Message { get; set; }
+        // public string Message { get; set; }
 
         /// <summary>
         /// konstruktor Xmodem
@@ -48,7 +47,7 @@ namespace WpfApp4.Model
             portNumber = new SerialPort( portName )
             {
                 // maksymalny czas dla odczytu z COM
-                ReadTimeout = 10000,
+                ReadTimeout = 10000,//Timeout.Infinite,
                 // predkosc BaudRate
                 BaudRate = baudrate,
                 // enkoding pozwalajacy na zachowanie wartosci wyzszych niz 127 - checksum
@@ -78,7 +77,7 @@ namespace WpfApp4.Model
             {
                 // sprawdzenie czy port jest otwarty
                 if (!portNumber.IsOpen)
-                    //jezeli nie to otwarcie portu
+                    // jezeli nie to otwarcie portu
                     portNumber.Open();
                 // zapewnia odpowiednie wywolanie IDispose zwalniajacego zasoby
                 using (portNumber)
@@ -89,11 +88,11 @@ namespace WpfApp4.Model
 
                     // petla wykonujaca się liczbaBajtowDoPrzeslania / 128 aby zapewnic przesylanie 
                     // tylko 128 bajtowych pakietow
+                    byte[] sentBytes = new byte[128];
                     for (int i = 0; i <= bytesToSend.Length / 128; i++)
                     {
                         do
                         {
-                            byte[] sentBytes = new byte[128];
                             // wpisz znak SOH do portu szeregowego
                             portNumber.WriteLine( SOH.ToString() );
                             // wpisz numer pakietu
@@ -106,11 +105,12 @@ namespace WpfApp4.Model
                                 // jezeli przeslano juz wszystkie bajty wiadomosci
                                 if (i * 128 + j == bytesToSend.Length)
                                 {
-                                    //dopelnij pozostale bajty znakiem SUB
+                                    // dopelnij pozostale bajty znakiem SUB
                                     for (int k = 0; k < 128 - j; k++)
                                     {
                                         //wpisz znak sub na port szeregowy
                                         portNumber.Write( Convert.ToChar( SUB ).ToString() );
+                                        // dopelnij wiadomosc znakami SUB do 128 byte
                                         sentBytes[j + k] = SUB;
                                     }
 
@@ -179,10 +179,7 @@ namespace WpfApp4.Model
 
                 // zapewnia odpowiednie wywolanie IDispose zwalniajacego zasoby
                 using (portNumber)
-                {
-                    // flaga bledu ustawiana domyslnie na false
-                    bool errorFlag = false;
-
+                { 
                     // czekaj az na porcie pojawi sie instrukcja sterujaca SOH
                     do
                     {
@@ -193,8 +190,10 @@ namespace WpfApp4.Model
 
                     do
                     {
+                        // flaga bledu ustawiana domyslnie na false
+                        bool errorFlag = false;
                         // sprawdz czy dopelnienie i numer pakietu sie zgadzaja
-                        if (255 - Convert.ToInt32( portNumber.ReadLine() ) != Convert.ToInt32( portNumber.ReadLine() ))
+                        if (255 - Convert.ToInt32( portNumber.ReadLine() ) != Convert.ToInt32(portNumber.ReadLine()))
                         {
                             // jezeli nie to ustaw flage błędu
                             errorFlag = true;
@@ -257,6 +256,8 @@ namespace WpfApp4.Model
                             portNumber.DiscardInBuffer();
                             // nadaj sygnal sterujacy NAK
                             portNumber.WriteLine( NAK.ToString() );
+                            // wyczysc liste pomocnicza
+                            byteListHelper.Clear();
                         }
 
                         // wykonuj instrukcje dopóki otrzymasz sygnal sterujacy SOH

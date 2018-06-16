@@ -1,1 +1,103 @@
-tfhdfhdfhdfth
+przylegly 		- adjacent
+obwód kola 		- cirsumference
+przystajacy 		- congruent
+pochodna 		- derivative
+przenoscic, przesuwac 	- displace
+trójkat równoboczny 	- equilateral triangle
+rozkladac na czynniki 	- factorize
+przeciwptostokatna 	- hypotenuse
+wpisac w 		- inscribe in
+trójkat równoramienny 	- isosceles triangle
+przyprostokatna 	- leg
+odjemna 		- minuend
+mnozna 			- multiplicand
+kat rozwarty 		- obtuse angle
+liczba porzadkowa 	- ordinal number
+obwód 			- perimeter
+iloczyn 		- product
+ulemek wlasciwy 	- proper fraction
+iloraz 			- quotient
+podnosic liczbe do potegi - raise a number to a power
+liczba wymierna 	- rational number
+wielkosc odwrotna 	- reciprocal
+ulamek dziesietny okresowy - recurring decimal
+skrócic/uptoscic ulamek - reduce to lowest terms
+równoleglobok 		- rhomboid/parallelogram
+romb 			- rhombus
+spelnic równanie 	- satisfy am equation
+pókole 			- semi-cicle
+indeks dolny 		- subscript
+wyciagnac pierwiastek	- take a root
+styczna 		- tangent
+stozek 			- cone
+cieciwa 		- chord
+sieczna 		- secant
+os 			- axis
+wklesly 		- concave
+wypukly 		- convex
+  
+canvas 			- brezent
+carry sth out 		- wykonac
+come up with 		- wymyslic
+pay off 		- powodzic sie, dawac dobre rezultaty 
+take up 		- odpowiadac na cos
+bring down 		- obnizac
+bring about 		- spowodowac
+take forward 		- sprzyjac czemus do rozwoju
+get round 		- poradzic sobie z problemem
+set up 			- zakladac np. biznes
+dung 			- lajno
+fertilizer 		- nawóz
+inflateble 		- nadmuchiiwanie
+insulation 		- izolacaja
+rigid 			- sztywny
+sealed 			- zapieczetowany
+
+  
+  
+agitated 		- poruszony
+confectionary 		- slodycze
+courteous 		- uprzejmy
+existing customer 	- osoba która obecnie jest klientem
+find your feet 		- stac sie niezaleznym
+originate 		- stac sie pierwszys raz w okreslonymi miejscy i czasie
+quibble 		- spierac sie
+tills 			- kasa fiskalna
+affiliated 		- stowarzyszony
+bribery 		- przekupstwo, barbarzynstwo
+contributor 		- cos co przyczynia sie do czegos
+credibility 		- wiarygodnosc  
+deception 		- oszustwo
+exploit			- wykorzystac
+greed 			- chciwosc
+itinerary 		- plan podrózy
+paddling 		- wioslowanie
+prejudice 		- uprzedzenie
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
